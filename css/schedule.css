@@ -188,6 +188,9 @@ body {
 #event .item.partner .content:hover {
   background-color: #4f607d;
 }
+#event .item.partner .content-hidden {
+  background-color: #627ba5;
+}
 #event .item .content .speakers {
   display: flex;
   align-items: flex-start;

@@ -209,10 +209,10 @@ function getData(event){
         obj.room = {};
         obj.room.capacity = 0; //backup api
         obj.room.id = undefined; //backup api
-        console.log("roomsArray[0]", roomsArray )
-         console.log("roomsArray[0] size ", _.size(roomsArray) )
-        console.log("rooms v4", v4)
-        console.log("current Value", value)
+        // console.log("roomsArray[0]", roomsArray )
+        //  console.log("roomsArray[0] size ", _.size(roomsArray) )
+        // console.log("rooms v4", v4)
+        // console.log("current Value", value)
 
         if (_.size(roomsArray) !== 0) {          
           obj.room.capacity = roomsArray[0].capacity;  // verification added because US 2017 does not have a room name set to a topic and capacity property cant be found
@@ -237,8 +237,8 @@ function getData(event){
         });
 
         var isPartner = _.includes(value.categoryids, partnerId); 
-        console.log("partnerId", partnerId);
-        console.log(isPartner);
+        // console.log("partnerId", partnerId);
+        // console.log(isPartner);
         if(isPartner === true) {
           obj.isPartner = true;
         } else {
