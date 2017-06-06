@@ -1,6 +1,6 @@
 var scheduleConfig = {
   timeframe: [8,23],
-  gridHeightCell: 40,
+  gridHeightCell: 60,
   gridWidthCell: 300,
 }
 
