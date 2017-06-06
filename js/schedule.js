@@ -1,5 +1,5 @@
 var scheduleConfig = {
-  timeframe: [8,23],
+  timeframe: [6,23],
   gridHeightCell: 60,
   gridWidthCell: 300,
 }
@@ -135,12 +135,12 @@ function getData(event){
   $.when(GetAPIData(daysUrl),GetAPIData(topicsUrl),GetAPIData(categoriesUrl),GetAPIData(roomsUrl),GetAPIData(speakersUrl)).then(function(v1,v2,v3,v4,v5){
     var conferencePathArray = conferenceArray(v3);
     // console.log("rooms here : " , v4);
-    console.log(v1);
-    console.log(v2);
-    console.log(v3);
-    console.log(v4);
-    console.log(v5);
-    console.log("PRESENTING....");
+    console.log("days",v1);
+    console.log("topics",v2);
+    console.log("categories",v3);
+    console.log("rooms",v4);
+    console.log("speakers",v5);
+    
 
 
 
@@ -335,6 +335,7 @@ function renderRooms(data){
 
   // console.log("rooms",rooms)
   var width = _.size(rooms)*scheduleConfig.gridWidthCell + 100;
+  console.log("rooms", rooms, "width", width);
   var output = "";
   output += '<div id="header-rooms" class="animated fadeIn" style="width: '+width+'px;">';
   _.map(rooms, function(o){
@@ -384,7 +385,7 @@ function renderCard(o, topics){
   var offsetTop = _.indexOf(timeTable, o.start)*scheduleConfig.gridHeightCell;
   // console.log(offsetTop,  _.indexOf(timeTable, o.start), o.start, o); 
   var height = (_.indexOf(timeTable, o.finish) - _.indexOf(timeTable, o.start))*scheduleConfig.gridHeightCell;
-  console.log(offsetLeft, o);
+  // console.log(offsetLeft, o);
   output = "";
   if(o.isPartner === true) { 
     output += '<div class="item partner" style="width:'+scheduleConfig.gridWidthCell+'px; height:'+height+'px; top:'+offsetTop+'px; left:'+offsetLeft+'px;">';
@@ -532,7 +533,7 @@ function Schedule(data, event){
     });
     var event = eventSelectedArray[0];
     $.when(getData(event)).then(function(data){
-
+       console.log("DATA",data)
       Schedule(data, event); //event = need to send event information also for select to have the proper event value already selected;
     });
 
@@ -543,11 +544,11 @@ function Schedule(data, event){
     $("#event .item").removeClass("filterIn").removeClass("filterOut");
     $("#event .item .content").css("backgroundColor","#292929");
     var value = $(this).val();
-    console.log(value);
+    // console.log(value);
     if(value !== "") {
       $("#event .item").each(function(){
         var id = $(this).find('.conference').attr("data-conference-id");
-        console.log(id == value);
+        // console.log(id == value);
         if (id == value) {
           $(this).addClass("filterIn")
           $(this).find(".content").css("backgroundColor", $(this).find('.conference').attr("data-color"));
