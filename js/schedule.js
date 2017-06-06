@@ -58,34 +58,39 @@ function loading(arg) {
     }, 300);
   }
 }
-function getPartnerId(array) {
-  var partnerIdArray = _.filter(array , function(o){
-            return o.name == "Presenting Partner";
-        }); 
 
-        var partnerExists = _.size(partnerIdArray) > 0 ? true : false;
-        var partnerId = "";
-        if (partnerExists == true) {
-          partnerId = partnerIdArray[0].id;
-        } else {
-          partnerId = "PARTNER_DOES_NOT_EXIST";          
-        }
+// presetning partner is now in event.js configuration
+// function getPartnerId(array) {
+//   var partnerIdArray = _.filter(array , function(o){
+//             return o.name == "Presenting Partner";
+//         }); 
 
-        return partnerId;
-}
-function conferenceArray(data){
+//         var partnerExists = _.size(partnerIdArray) > 0 ? true : false;
+//         var partnerId = "";
+//         if (partnerExists == true) {
+//           partnerId = partnerIdArray[0].id;
+//         } else {
+//           partnerId = "PARTNER_DOES_NOT_EXIST";          
+//         }
+
+//         return partnerId;
+// }
+function conferenceArray(data, event){
   var colors = ["#ff3636" , "#f322a2" , "#a72fdc" , "#7031f3" , "#4679ff" , "#05caf3" , "#20ec9f" , "#42ec20" , "#f3e910" , "#a90000" , "#a90067" , "#8500a9" , "#5e00a9", "#2000a9" , "#0065a9" , "#00a988", "#00a91b" , "#6aa900", "#a95c00"];
 
-  var conference = _.filter(data , function(obj){
-    return obj.name === "Conference Path";
-  });
-  var conferencePathExists = _.size(conference) > 0 ? true : false;
-  var conferencePathId = "";
-  if (conferencePathExists == true) {
-    conferencePathId = conference[0].id;
-  } else {
-    conferencePathId = "CONFERENCEPATHDOESNOTEXIST";
-  }
+
+  var conferencePathId = event.conferencePath;
+
+  // var conference = _.filter(data , function(obj){
+  //   return obj.name === "Conference Path";
+  // });
+  // var conferencePathExists = _.size(conference) > 0 ? true : false;
+  // var conferencePathId = "";
+  // if (conferencePathExists == true) {
+  //   conferencePathId = conference[0].id;
+  // } else {
+  //   conferencePathId = "CONFERENCEPATHDOESNOTEXIST";
+  // }
   var conferencePathArrayRaw = _.filter(data, function(obj){
     return obj.parentid === conferencePathId;
   })
@@ -132,14 +137,15 @@ function getData(event){
   var roomsUrl = 'https://api.eventpoint.com/2.3/program/rooms?code='+eventId+'&apikey=' + eventApi;
   var speakersUrl = 'https://api.eventpoint.com/2.3/program/speakers?code='+eventId+'&apikey=' + eventApi;
   loading(true);
+  console.log('event',event);
   $.when(GetAPIData(daysUrl),GetAPIData(topicsUrl),GetAPIData(categoriesUrl),GetAPIData(roomsUrl),GetAPIData(speakersUrl)).then(function(v1,v2,v3,v4,v5){
-    var conferencePathArray = conferenceArray(v3);
+    var conferencePathArray = conferenceArray(v3, event);
     // console.log("rooms here : " , v4);
-    console.log("days",v1);
-    console.log("topics",v2);
-    console.log("categories",v3);
-    console.log("rooms",v4);
-    console.log("speakers",v5);
+    // console.log("days",v1);
+    // console.log("topics",v2);
+    // console.log("categories",v3);
+    // console.log("rooms",v4);
+    // console.log("speakers",v5);
     
 
 
@@ -174,7 +180,8 @@ function getData(event){
         
 
        
-        var partnerId = getPartnerId(v3);
+        // var partnerId = getPartnerId(v3);
+        var partnerId = event.presentingPartner;
                  
         // console.log("SPEAKERS IDS " , speakersArray);
 
@@ -206,6 +213,7 @@ function getData(event){
          console.log("roomsArray[0] size ", _.size(roomsArray) )
         console.log("rooms v4", v4)
         console.log("current Value", value)
+
         if (_.size(roomsArray) !== 0) {          
           obj.room.capacity = roomsArray[0].capacity;  // verification added because US 2017 does not have a room name set to a topic and capacity property cant be found
         }
@@ -229,7 +237,8 @@ function getData(event){
         });
 
         var isPartner = _.includes(value.categoryids, partnerId); 
-
+        console.log("partnerId", partnerId);
+        console.log(isPartner);
         if(isPartner === true) {
           obj.isPartner = true;
         } else {
