@@ -127,7 +127,7 @@ function getData(event){
   var eventApi = event.apiKey;
   var eventTimeAdjust = parseFloat(event.timeAdjust);
   var daysUrl = 'http://api.eventpoint.com/2.3/program/days?code='+eventId+'&apikey=' + eventApi;
-  var topicsUrl = 'http://api.eventpoint.com/2.3/program/topics?code='+eventId+'&apikey=' + eventApi;
+  var topicsUrl = 'http://api.eventpoint.com/2.3/program/topics?code='+eventId+'&apikey=' + eventApi + '&pagesize=200';
   var categoriesUrl = 'https://api.eventpoint.com/2.3/program/categories?code='+eventId+'&apikey=' + eventApi;
   var roomsUrl = 'https://api.eventpoint.com/2.3/program/rooms?code='+eventId+'&apikey=' + eventApi;
   var speakersUrl = 'https://api.eventpoint.com/2.3/program/speakers?code='+eventId+'&apikey=' + eventApi;
@@ -199,14 +199,26 @@ function getData(event){
           result.push(obj);
           return result;
         },[]);
+        obj.room = {};
+        obj.room.capacity = 0; //backup api
+        obj.room.id = undefined; //backup api
+        console.log("roomsArray[0]", roomsArray )
+         console.log("roomsArray[0] size ", _.size(roomsArray) )
+        console.log("rooms v4", v4)
+        console.log("current Value", value)
+        if (_.size(roomsArray) !== 0) {          
+          obj.room.capacity = roomsArray[0].capacity;  // verification added because US 2017 does not have a room name set to a topic and capacity property cant be found
+        }
         obj.id = value.id;
         obj.sessionCode = value.code;
         obj.description = value.description;
         obj.publishingStatus = value.publishingstatus;
-        obj.room = {};
+        
         obj.room.title = value.room;
-        obj.room.capacity = roomsArray[0].capacity;
-        obj.room.id = roomsArray[0].id;
+        
+        if (_.size(roomsArray) !== 0) {    
+          obj.room.id = roomsArray[0].id;
+        }
         obj.categoryids = value.categoryids;
         obj.start = moment(value.start).utcOffset(eventTimeAdjust).format("HH:mm");
         obj.finish = moment(value.finish).utcOffset(eventTimeAdjust).format("HH:mm");
@@ -335,7 +347,7 @@ function renderRooms(data){
 
   // console.log("rooms",rooms)
   var width = _.size(rooms)*scheduleConfig.gridWidthCell + 100;
-  console.log("rooms", rooms, "width", width);
+
   var output = "";
   output += '<div id="header-rooms" class="animated fadeIn" style="width: '+width+'px;">';
   _.map(rooms, function(o){
@@ -361,7 +373,7 @@ function renderGrid(timeframe){
   // console.log(output);
 
   $("#schedule").append(output);
-  $('#grid').css("width");
+  // $('#grid').css("width", $('#header-rooms').width());
   $('#schedule .intervals').css("height",scheduleConfig.gridHeightCell+"px").css("lineHeight", scheduleConfig.gridHeightCell + 'px');
 }
 
@@ -489,13 +501,18 @@ function Schedule(data, event){
   renderHeader(data, event);
   renderGrid(scheduleConfig.timeframe);
   renderTable(data[0]);
-  $('#grid').css("width", $('#header-rooms').width() +100);
-  $('body').on("change", "#header-day-select", function(){
+  
+  $('#grid').css("width", $('#header-rooms').width() + 100);
+  $("#header-day-select").on("change", function(){
    var value = $(this).val();
    var dataFilteredByDate = _.filter(data, function(o){
      return o.date == value;
    });
+   console.log("data", data);
+   console.log("value", value);
+   console.log("filtered by date", dataFilteredByDate[0]);
    renderTable(dataFilteredByDate[0]);
+   $('#grid').css("width", $('#header-rooms').width() + 100);
   });
 
 
