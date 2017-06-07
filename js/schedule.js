@@ -492,10 +492,68 @@ function isSmallCard(start , end) {
     
 }
 
+function checkConflicts(data) {
+  var array = [];
+  var timeframe = createFlatTimeGridArray();
+  var arrayTimeIndexInterval = _.reduce(data, function(result, value, key){
+    var obj = {};
 
+    obj.id = value.id;
+    obj.startIndex = _.indexOf(timeframe, value.start);
+    obj.endIndex = _.indexOf(timeframe, value.finish);
+    obj.room = value.room;
+    result.push(obj);
+
+    return result;
+  },[]);
+
+  console.log(arrayTimeIndexInterval);
+
+  array = _.reduce(data, function(result, value, key){
+      currentObj = _.filter(arrayTimeIndexInterval, function(obj){return obj.id == value.id})[0];
+      
+      var filteredArrayByRoom = _.chain(arrayTimeIndexInterval)
+                                  .filter(function(o){return o.room.id == currentObj.room.id})
+                                  .filter(function(o){return o.id !== currentObj.id})
+                                  .value();
+
+      var checkIfTopicHasTimeConflict = _.filter(filteredArrayByRoom, function(o){
+        var result = false;
+          // console.log(currentObj.startIndex);
+          // console.log(currentObj.endIndex);
+          // console.log("<<<<<<<<<<");
+          // console.log(o.startIndex);
+          // console.log(o.endIndex);
+           // console.log("<<<<<<<<<<");
+        for (var i = currentObj.startIndex; i <= currentObj.endIndex; i++) {
+          // console.log(i);
+
+          if (i > o.startIndex && i < o.endIndex || currentObj.startIndex == o.startIndex && currentObj.endIndex == o.endIndex) {
+            result = true;
+
+          } 
+        }
+        // console.log("---------")
+
+        return result;     
+      });
+
+      console.log("checkIfConflictArray", _.size(checkIfTopicHasTimeConflict));
+      console.log("conflictArray", checkIfTopicHasTimeConflict);
+      console.log("current topic", currentObj);
+      // console.log("filter by room of current object without actual room", filteredArrayByRoom);
+
+    return result;
+  });
+
+  return array;
+}
 
 function renderTable(data) {
   // console.log(data.topics);
+
+  console.log("THis is data", data);
+  checkConflicts(data.topics);
   $("#event").remove();
   renderRooms(data);
   output = "";
@@ -507,6 +565,7 @@ function renderTable(data) {
   $('#schedule').append(output);
 }
 function Schedule(data, event){
+
   renderHeader(data, event);
   renderGrid(scheduleConfig.timeframe);
   renderTable(data[0]);
