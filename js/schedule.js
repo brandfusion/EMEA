@@ -596,7 +596,7 @@ function renderTable(data) {
   output += '</div>';
   $('#schedule').append(output);
 }
-function Schedule(data, event) { 
+function Schedule(data, event) {   
   renderHeader(data, event);
   renderGrid(scheduleConfig.timeframe);
 
@@ -661,6 +661,7 @@ $(function(){
   });
   //application event change
   $('body').on("change", "#header-event-select", function(){
+    $('#conflicts-wrapper').hide();
     var value = $(this).val();
     $('#schedule').addClass("animated fadeOut");
     var eventSelectedArray = _.filter(eventData, function(o){
