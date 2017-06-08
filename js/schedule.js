@@ -139,22 +139,12 @@ function getData(event){
   loading(true);
   console.log('event',event);
   $.when(GetAPIData(daysUrl),GetAPIData(topicsUrl),GetAPIData(categoriesUrl),GetAPIData(roomsUrl),GetAPIData(speakersUrl)).then(function(v1,v2,v3,v4,v5){
-    var conferencePathArray = conferenceArray(v3, event);
-    // console.log("rooms here : " , v4);
+    var conferencePathArray = conferenceArray(v3, event);    
     // console.log("days",v1);
     // console.log("topics",v2);
     // console.log("categories",v3);
     // console.log("rooms",v4);
-    // console.log("speakers",v5);
-    
-
-
-
-    // console.log(_.includes(v3 , o.id));
-
-
-
-    // console.log("v2",v2);
+    // console.log("speakers",v5);    
     var scheduleData = _.reduce(v1, function(result, value, key){
       var date = value.date;
       // date = date.split('T')[0];
@@ -171,22 +161,15 @@ function getData(event){
       .reduce(function(result, value, key){
         var obj = {};
         var roomsArray = _.chain(v4)
-                            .filter(function(o){
-                                return o.name == value.room;
-                            })
-                            .uniqBy("id")
-                            .value();
-        
-        
-
-       
+                          .filter(function(o){
+                              return o.name == value.room;
+                          })
+                          .uniqBy("id")
+                          .value();
         // var partnerId = getPartnerId(v3);
         var partnerId = event.presentingPartner;
                  
         // console.log("SPEAKERS IDS " , speakersArray);
-
-
-
         // console.log("PARTNER ID: " , partnerId);
 
         obj.title = value.title;
@@ -210,7 +193,7 @@ function getData(event){
         obj.room.capacity = 0; //backup api
         obj.room.id = undefined; //backup api
         // console.log("roomsArray[0]", roomsArray )
-        //  console.log("roomsArray[0] size ", _.size(roomsArray) )
+        // console.log("roomsArray[0] size ", _.size(roomsArray) )
         // console.log("rooms v4", v4)
         // console.log("current Value", value)
 
@@ -236,9 +219,7 @@ function getData(event){
           return _.includes(value.categoryids, object.id)
         });
 
-        var isPartner = _.includes(value.categoryids, partnerId); 
-        // console.log("partnerId", partnerId);
-        // console.log(isPartner);
+        var isPartner = _.includes(value.categoryids, partnerId);         
         if(isPartner === true) {
           obj.isPartner = true;
         } else {
@@ -304,19 +285,18 @@ function buildDaySelect(data){
 
   function buildConferencePathSelect(data){
     var conferencePathArray = _.chain(data)
-    .reduce(function(result, value, key){
-      var topicConferenceArray = _.reduce(value.topics, function(result2, value2, key2){
-                                // console.log(value2.conferencePath);
-                                result2 = _.concat(result2, value2.conferencePath);
-                                return result2;
-                              },[]);
-                              // console.log("topicConferenceArray",topicConferenceArray);
-                              result = _.concat(result, topicConferenceArray);
-                              return result;
-                            },[])
-    .uniqBy("id")
-    .sortBy(function(o){return o.name})
-    .value();
+                                .reduce(function(result, value, key){
+                                  var topicConferenceArray = _.reduce(value.topics, function(result2, value2, key2){                                
+                                    result2 = _.concat(result2, value2.conferencePath);
+                                    return result2;
+                                  },[]);
+                                                        
+                                  result = _.concat(result, topicConferenceArray);
+                                  return result;
+                                },[])
+                                .uniqBy("id")
+                                .sortBy(function(o){return o.name})
+                                .value();
     var output = '<select id="header-conference-select" class="form-control">';
     output += '<option value="" seleted>Pick a conference path</option>';
     _.map(conferencePathArray, function(o){
@@ -332,12 +312,10 @@ function buildDaySelect(data){
     output += buildDaySelect(data);
     output += buildConferencePathSelect(data);
     output += '</div>';
-    $("#schedule").prepend(output);
-  // console.log("event",event);
+    $("#schedule").prepend(output); 
   $("#header-event-select").val(event.id);
 }
-function renderRooms(data){
-  // console.log("dataro",data)
+function renderRooms(data){  
   $('#header-rooms').remove()
   var rooms = _.chain(data.topics)
               .reduce(function(result, value, key){
@@ -353,9 +331,8 @@ function renderRooms(data){
               .uniqBy("id")
               .sortBy("capacity")
               .value();
-  rooms = rooms.reverse();            
+  rooms = rooms.reverse(); //sort desc
 
-  // console.log("rooms",rooms)
   var width = _.size(rooms)*scheduleConfig.gridWidthCell + 100;
 
   var output = "";
@@ -365,13 +342,11 @@ function renderRooms(data){
   });
   output += '</div>';
 
-
   $('#schedule').prepend(output);
 }
 function renderGrid(timeframe){
   var output = '<div id="grid" class="animated fadeIn">';
-  var timeTable = createTimeGridArray();
-  // console.log(timeframeArray);
+  var timeTable = createTimeGridArray(); 
   _.map(timeTable, function(o){
     output += '<div class="hours">';
     _.map(o.intervals, function(interval){
@@ -379,18 +354,14 @@ function renderGrid(timeframe){
     });
     output += '</div>';
   });
-  output += '</div>';
-  // console.log(output);
+  output += '</div>'; 
 
-  $("#schedule").append(output);
-  // $('#grid').css("width", $('#header-rooms').width());
+  $("#schedule").append(output);  
   $('#schedule .intervals').css("height",scheduleConfig.gridHeightCell+"px").css("lineHeight", scheduleConfig.gridHeightCell + 'px');
 }
 
 function renderCard(o, topics){
-
-  var timeTable = createFlatTimeGridArray();
-  // console.log(timeTable);
+  var timeTable = createFlatTimeGridArray(); 
   var rooms = _.chain(topics)
               .reduce(function(result, value, key){
                 result.push(value.room);
@@ -399,17 +370,11 @@ function renderCard(o, topics){
               .uniqBy("id")            
               .sortBy("capacity")
               .value();
-  rooms = rooms.reverse();            
-  console.log("rooms",rooms);            
-// console.log(rooms);
-// console.log(_.findIndex(rooms, {"title": o.room.title}));
-  // console.log(offsetLeft, rooms, o.room );           
+  rooms = rooms.reverse(); 
   var offsetLeft = _.findIndex(rooms, {"title": o.room.title})*scheduleConfig.gridWidthCell;
-  var offsetTop = _.indexOf(timeTable, o.start)*scheduleConfig.gridHeightCell;
-  // console.log(offsetTop,  _.indexOf(timeTable, o.start), o.start, o); 
+  var offsetTop = _.indexOf(timeTable, o.start)*scheduleConfig.gridHeightCell;  
   var height = (_.indexOf(timeTable, o.finish) - _.indexOf(timeTable, o.start))*scheduleConfig.gridHeightCell;
-  // console.log(offsetLeft, o);
-  output = "";
+  var output = "";
   if(o.isPartner === true) { 
     output += '<div class="item partner" style="width:'+scheduleConfig.gridWidthCell+'px; height:'+height+'px; top:'+offsetTop+'px; left:'+offsetLeft+'px;">';
   } else {
@@ -423,6 +388,7 @@ function renderCard(o, topics){
   });
   output += '</div>';
   output += '<h2>'+o.title+'</h2>';
+
   if(isSmallCard(o.start , o.finish) === true) {
     output += renderNarrowSpeakers(o.speakers);
   } else {
@@ -481,8 +447,7 @@ function renderSpeakers(arr) {
 }
 
 
-function isSmallCard(start , end) {
-  
+function isSmallCard(start , end) {  
   var timeslots = createFlatTimeGridArray();
   var result = (_.indexOf(timeslots , end)) - (_.indexOf(timeslots , start));
   
@@ -495,104 +460,126 @@ function isSmallCard(start , end) {
 }
 
 function getRoomConflictArray(data) {
-  var array = [];
+  var rawConflictArray = [];
   var timeframe = createFlatTimeGridArray();
   var arrayTimeIndexInterval = _.reduce(data, function(result, value, key){
     var obj = {};
-
     obj.id = value.id;
     obj.startIndex = _.indexOf(timeframe, value.start);
     obj.endIndex = _.indexOf(timeframe, value.finish);
     obj.room = value.room;
     result.push(obj);
+    return result;
+  },[]); 
 
+  rawConflictArray = _.reduce(data, function(result, value, key){
+    currentObj = _.filter(arrayTimeIndexInterval, function(obj){return obj.id == value.id})[0];      
+    var filteredArrayByRoom = _.chain(arrayTimeIndexInterval)
+                                .filter(function(o){return o.room.id == currentObj.room.id})
+                                .filter(function(o){return o.id !== currentObj.id})
+                                .value();
+    var conflictArray = _.filter(filteredArrayByRoom, function(o){
+      var condition = false;          
+      for (var i = currentObj.startIndex; i <= currentObj.endIndex; i++) {        
+        if (i > o.startIndex && i < o.endIndex || currentObj.startIndex == o.startIndex && currentObj.endIndex == o.endIndex) {
+          condition = true;
+        } 
+      } 
+      return condition;     
+    });   
+    // console.log("reduceCurrentObject", value);
+    // console.log("currentObject", currentObj);
+    // console.log("conflictArray", conflictArray); 
+    if (_.size(conflictArray) > 0) { 
+      var obj = {};
+      obj.id = value.id;
+      obj.title = value.title;
+      obj.roomName = value.room.title;
+      obj.roomId = value.room.id;
+      obj.start = value.start;
+      obj.finish = value.finish;
+      obj.roomConflict = _.reduce(conflictArray, function(result, value, key){
+        var conflictObject = _.filter(data, function(o){return o.id == value.id})[0];
+        var obj = {};
+        obj.id = conflictObject.id;
+        obj.title = conflictObject.title;
+        obj.roomName = conflictObject.room.title;
+        obj.roomId = conflictObject.room.id;
+        obj.start = conflictObject.start;
+        obj.finish = conflictObject.finish;
+        obj.errorType = "time";
+        result.push(obj);
+
+        return result;
+      },[]);
+      result.push(obj);
+    } else {
+      result = result;
+    }      
     return result;
   },[]);
-
-  console.log(arrayTimeIndexInterval);
-
-  array = _.reduce(data, function(result, value, key){
-      currentObj = _.filter(arrayTimeIndexInterval, function(obj){return obj.id == value.id})[0];
-      
-      var filteredArrayByRoom = _.chain(arrayTimeIndexInterval)
-                                  .filter(function(o){return o.room.id == currentObj.room.id})
-                                  .filter(function(o){return o.id !== currentObj.id})
-                                  .value();
-
-      var conflictArray = _.filter(filteredArrayByRoom, function(o){
-        var condition = false;
-          // console.log(currentObj.startIndex);
-          // console.log(currentObj.endIndex);
-          // console.log("<<<<<<<<<<");
-          // console.log(o.startIndex);
-          // console.log(o.endIndex);
-           // console.log("<<<<<<<<<<");
-        for (var i = currentObj.startIndex; i <= currentObj.endIndex; i++) {
-          // console.log(i);
-
-          if (i > o.startIndex && i < o.endIndex || currentObj.startIndex == o.startIndex && currentObj.endIndex == o.endIndex) {
-            condition = true;
-
-          } 
-        }
-        // console.log("---------")
-
-        return condition;     
-      });
-      // console.log("conflictArray", conflictArray);
-      // console.log("checkIfConflictArray", _.size(checkIfTopicHasTimeConflict));
-      // console.log("conflictArray", checkIfTopicHasTimeConflict);
-      // console.log("current topic", currentObj);
-      // console.log("filter by room of current object without actual room", filteredArrayByRoom);
-      // var arrayToConcat = 
-
-      result = _.concat(result, conflictArray)
-    return result;
-  },[]);
-
-  // console.log("conflictarrayYYY", array);
-
-  var sortedByRoomArray = _.chain(array)
-                          .reduce(function(result, value, key){
-                            var obj = {}
-                            obj.id = value.id;                           
-                            obj.room = value.room.title;
-                            result.push(obj);
-                            return result;
-                          },[])
-                          .sortBy("room")
-                          .value();
+  var sortedByRoomArray = _.chain(rawConflictArray)                          
+                          .sortBy("roomName")
+                          .value();                          
   return sortedByRoomArray;
 }
-function renderRoomConflicts(data, conflictArray) {
-  // console.log("data",data);
-
-
-
+function renderRoomConflicts(conflictArray) {
+  // $('#conflicts-room').remove();
+  // $('#conflict-trigger').remove();
+  // $('#refresh').remove();
   var output = '';
+  output = '<div id="conflicts-wrapper" class="animated fadeIn">';
   output += '<div id="conflicts-room">';
-  _.map(conflictArray, function(o){
-    var conflictObject = _.filter(data.topics, function(topicObj){return topicObj.id == o.id})[0];
-    output += '<div class="item"><p class="name">'+conflictObject.title+'</p><p class="id">'+conflictObject.id+'</p><p class="hours">'+conflictObject.start+'-'+conflictObject.finish+'</p><p class="room">'+conflictObject.room.title+'</p></div>';
+  output += '<div class="header">';
+  output += '<h2>Event conflicts</h2>';
+  output += '<i id="conflicts-close" class="fa fa-times" aria-hidden="true"></i>';
+  output += '</div>';
+  _.map(conflictArray, function(o){   
+    output += '<div class="item">';
+    output += '<p class="name"><strong>Name:</strong> '+o.title+'</p>';
+    output += '<p class="id"><strong>ID:</strong> '+o.id+'</p>';
+    output += '<p class="hours"><strong>Timeframe:</strong> '+o.start+'-'+o.finish+'</p>';
+    output += '<p class="room"><strong>Room:</strong> '+o.roomName+'</p>';
+    output += '<button class="detail"><i class="fa fa-eye" aria-hidden="true"></i> conflict</button>'
+    _.map(o.roomConflict, function(obj){
+      output += '<div class="conflict-item">';
+      output += '<p class="name"><strong>Name:</strong> '+obj.title+'</p>';
+      output += '<p class="id"><strong>ID:</strong> '+obj.id+'</p>';
+      output += '<p class="hours"><strong>Timeframe:</strong> '+obj.start+'-'+obj.finish+'</p>';
+      output += '<p class="room"><strong>Room:</strong> '+obj.roomName+'</p>';
+      if (obj.errorType == "time") {
+        output += '<p class="error-'+obj.errorType+'">Time interval conflict</p>'
+      }
+      if (obj.errorType == "speaker") {
+        output += '<p class="error-'+obj.errorType+'">Speaker conflict</p>'
+      }
+      output += '</div>';
+    });
+    output += '</div>';
   });
+  output += '</div>';
   output += '</div>';
 
   $('#schedule-header').append('<div id="conflict-trigger"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ('+_.size(conflictArray)+') conflicts </div>');
   $('#schedule-header').append('<div id="refresh"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh application</div>')
 
   $('#schedule').before(output);
+
+  //events conflict cards
+  $('#conflicts-room .item .detail').on("click", function(){
+    $('#conflicts-room .conflict-item').hide();
+    $(this).parents(".item").find(".conflict-item").fadeIn(300);
+  });
 }
 function renderTable(data) {
-  // console.log(data.topics);
- $('#conflicts-room').remove();
+  // console.log(data.topics); 
+  $('#conflicts-wrapper').remove();
   $('#conflict-trigger').remove();
   $('#refresh').remove();
-  console.log("THis is data", data);
-  var conflictRoomArray = getRoomConflictArray(data.topics);
-  console.log("conflict array", conflictRoomArray, );
+  // console.log("THis is data", data);
+  var conflictRoomArray = getRoomConflictArray(data.topics);  
   if (_.size(conflictRoomArray) > 0) {
-    console.log("intra")
-    renderRoomConflicts(data, conflictRoomArray);
+    renderRoomConflicts(conflictRoomArray);
   } 
   $("#event").remove();
   renderRooms(data);
@@ -604,48 +591,49 @@ function renderTable(data) {
   output += '</div>';
   $('#schedule').append(output);
 }
-function Schedule(data, event){
-  $('#conflicts-room').remove();
-  $('#conflict-trigger').remove();
-  $('#refresh').remove();
+function Schedule(data, event) { 
   renderHeader(data, event);
   renderGrid(scheduleConfig.timeframe);
-  renderTable(data[0]);
-  
+
+  //Init - first render of schedule / first day autoselect
+  renderTable(data[0]);  
   $('#grid').css("width", $('#header-rooms').width() + 100);
-  $("#header-day-select").on("change", function(){
+
+  //Schedule Events 
+  $("#header-day-select").on("change", function(){ //header selecet event change
    var value = $(this).val();
    var dataFilteredByDate = _.filter(data, function(o){
      return o.date == value;
-   });
-   // console.log("data", data);
-   // console.log("value", value);
-   // console.log("filtered by date", dataFilteredByDate[0]);
+   });   
    renderTable(dataFilteredByDate[0]);
    $('#grid').css("width", $('#header-rooms').width() + 100);
   });
+ 
+  $('body').on("click", "#conflict-trigger", function(){
+    $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeToggle(300);
+  });
 
-    //events 
-    $('body').on("click", "#conflict-trigger", function(){
-      $('#conflicts-room').fadeToggle(300);
-    });
-    $('body').on("click", "#refresh", function(){
-      var dataFilteredByDate = _.filter(data, function(o){
-         return o.date == $("#header-day-select").val();
-      });
-      console.log("newData",dataFilteredByDate[0] )
-      renderTable(dataFilteredByDate[0]);
-      $('#grid').css("width", $('#header-rooms').width() + 100);
-    });
-    //Run
-    // console.log("schedule",data);
-    loading(false);
+  $('body').on("click", "#conflicts-close", function(){
+    $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeOut(300);
+  });
 
-  }
+  $('body').on("click", "#refresh", function(){
+    var dataFilteredByDate = _.filter(data, function(o){
+       return o.date == $("#header-day-select").val();
+    });      
+    renderTable(dataFilteredByDate[0]);
+    $('#grid').css("width", $('#header-rooms').width() + 100);
+  });
 
 
+   
+  loading(false);
 
-  $(function(){
+}
+
+
+
+$(function(){
   //init first select
   $("#schedule").before(buildEventSelectPrimary(eventData));
   //on first select change
