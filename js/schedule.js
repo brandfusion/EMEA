@@ -540,14 +540,16 @@ function renderRoomConflicts(conflictArray) {
   _.map(conflictArray, function(o){   
     output += '<div class="item">';
     output += '<p class="name"><strong>Name:</strong> '+o.title+'</p>';
-    output += '<p class="id"><strong>ID:</strong> '+o.sessionCode+'</p>';
+    output += '<p class="id"><strong>ID:</strong> '+o.id+'</p>';
+    output += '<p class="session"><strong>Session Code:</strong> '+o.sessionCode+'</p>';
     output += '<p class="hours"><strong>Timeframe:</strong> '+o.start+'-'+o.finish+'</p>';
     output += '<p class="room"><strong>Room:</strong> '+o.roomName+'</p>';
     output += '<button class="detail"><i class="fa fa-eye" aria-hidden="true"></i> conflict</button>'
     _.map(o.roomConflict, function(obj){
       output += '<div class="conflict-item">';
       output += '<p class="name"><strong>Name:</strong> '+obj.title+'</p>';
-      output += '<p class="id"><strong>ID:</strong> '+obj.sessionCode+'</p>';
+      output += '<p class="id"><strong>ID:</strong> '+obj.id+'</p>';
+      output += '<p class="id"><strong>Session Code:</strong> '+obj.sessionCode+'</p>';
       output += '<p class="hours"><strong>Timeframe:</strong> '+obj.start+'-'+obj.finish+'</p>';
       output += '<p class="room"><strong>Room:</strong> '+obj.roomName+'</p>';
       if (obj.errorType == "time") {
