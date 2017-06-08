@@ -266,6 +266,11 @@ body {
 }
 #conflicts-room .item {
   margin-bottom: 0.5rem;
+    background-color: #efc114;
+    padding: 0.5em;
+}
+#conflicts-room .item:last-child {
+  margin-bottom: 0;
 }
 #conflicts-room .item p {
   margin-bottom: 0px;
