@@ -614,12 +614,12 @@ function Schedule(data, event) {
  
   $('body').on("click", "#conflict-trigger", function(){
     $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeToggle(300);
-    $('#conflict-item').hide();
+    $('.conflict-item').hide();
   });
 
   $('body').on("click", "#conflicts-close", function(){
     $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeOut(300);
-    $('#conflict-item').hide();
+    $('.conflict-item').hide();
   });
 
   $('body').on("click", "#refresh", function(){
