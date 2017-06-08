@@ -15,7 +15,7 @@ body {
   overflow: auto;
   position: relative;
 }
-.hours:nth-child(2n+2) {
+#grid .hours:nth-child(2n+2) {
   background-color: #fbfbfb;
 }
 
@@ -251,4 +251,43 @@ body {
   left: 0;
   right: 17px;
   min-width: 100%;
+}
+#conflicts-room {
+  position: fixed;
+    right: 2rem;
+    top: 9rem;
+    width: 40rem;
+    background-color: #ffd2d2;
+    babckground-color: #e2b405;
+    padding: 1rem;
+    z-index: 9999;
+    font-weight: 400;
+    font-size: 0.75rem;
+}
+#conflicts-room .item {
+  margin-bottom: 0.5rem;
+}
+#conflicts-room .item p {
+  margin-bottom: 0px;
+}
+#conflicts-room .name {
+  font-weight: 700;
+}
+#conflicts-room .id {
+  font-weight: 400;
+  font-style: italic;
+}
+
+#schedule-header #conflict-trigger {
+  color: #e2b404;
+  font-size: 0.875rem;
+  margin-left: 2rem;
+}
+#schedule-header #conflict-trigger i {
+  margin-right: 0.2rem;
+  color: #e2b404;
+  font-size: inherit;
+}
+#conflict-trigger {
+  cursor: pointer;
 }

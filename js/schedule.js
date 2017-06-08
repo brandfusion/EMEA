@@ -492,7 +492,7 @@ function isSmallCard(start , end) {
     
 }
 
-function checkConflicts(data) {
+function getRoomConflictArray(data) {
   var array = [];
   var timeframe = createFlatTimeGridArray();
   var arrayTimeIndexInterval = _.reduce(data, function(result, value, key){
@@ -517,8 +517,8 @@ function checkConflicts(data) {
                                   .filter(function(o){return o.id !== currentObj.id})
                                   .value();
 
-      var checkIfTopicHasTimeConflict = _.filter(filteredArrayByRoom, function(o){
-        var result = false;
+      var conflictArray = _.filter(filteredArrayByRoom, function(o){
+        var condition = false;
           // console.log(currentObj.startIndex);
           // console.log(currentObj.endIndex);
           // console.log("<<<<<<<<<<");
@@ -529,31 +529,54 @@ function checkConflicts(data) {
           // console.log(i);
 
           if (i > o.startIndex && i < o.endIndex || currentObj.startIndex == o.startIndex && currentObj.endIndex == o.endIndex) {
-            result = true;
+            condition = true;
 
           } 
         }
         // console.log("---------")
 
-        return result;     
+        return condition;     
       });
-
-      console.log("checkIfConflictArray", _.size(checkIfTopicHasTimeConflict));
-      console.log("conflictArray", checkIfTopicHasTimeConflict);
-      console.log("current topic", currentObj);
+      // console.log("conflictArray", conflictArray);
+      // console.log("checkIfConflictArray", _.size(checkIfTopicHasTimeConflict));
+      // console.log("conflictArray", checkIfTopicHasTimeConflict);
+      // console.log("current topic", currentObj);
       // console.log("filter by room of current object without actual room", filteredArrayByRoom);
+      // var arrayToConcat = 
 
+      result = _.concat(result, conflictArray)
     return result;
-  });
+  },[]);
 
+  
   return array;
 }
+function renderRoomConflicts(data, conflictArray) {
+  // console.log("data",data);
 
+  var output = '';
+  output += '<div id="conflicts-room">';
+  _.map(conflictArray, function(o){
+    var conflictObject = _.filter(data.topics, function(topicObj){return topicObj.id == o.id})[0];
+    output += '<div class="item"><p class="name">'+conflictObject.title+'</p><p class="id">'+conflictObject.id+'</p><p class="hours">'+conflictObject.start+'-'+conflictObject.finish+'</p><p class="room">'+conflictObject.room.title+'</p></div>';
+  });
+  output += '</div>';
+
+  $('#schedule-header').append('<div id="conflict-trigger"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ('+_.size(conflictArray)+') conflicts </div>')
+
+  $('#schedule').before(output);
+}
 function renderTable(data) {
   // console.log(data.topics);
-
+ $('#conflicts-room').remove();
+  $('#conflict-trigger').remove();
   console.log("THis is data", data);
-  checkConflicts(data.topics);
+  var conflictRoomArray = getRoomConflictArray(data.topics);
+  console.log("conflict array", conflictRoomArray, );
+  if (_.size(conflictRoomArray) > 0) {
+    console.log("intra")
+    renderRoomConflicts(data, conflictRoomArray);
+  } 
   $("#event").remove();
   renderRooms(data);
   output = "";
@@ -583,7 +606,10 @@ function Schedule(data, event){
    $('#grid').css("width", $('#header-rooms').width() + 100);
   });
 
-
+    //events 
+    $('#conflict-trigger').on("click", function(){
+      $('#conflicts-room').fadeToggle(300);
+    });
     //Run
     // console.log("schedule",data);
     loading(false);
