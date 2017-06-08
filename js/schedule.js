@@ -550,11 +550,24 @@ function getRoomConflictArray(data) {
     return result;
   },[]);
 
-  // var sortedByRoomArray = _.orderBy(array,'[room]')
-  return array;
+  // console.log("conflictarrayYYY", array);
+
+  var sortedByRoomArray = _.chain(array)
+                          .reduce(function(result, value, key){
+                            var obj = {}
+                            obj.id = value.id;                           
+                            obj.room = value.room.title;
+                            result.push(obj);
+                            return result;
+                          },[])
+                          .sortBy("room")
+                          .value();
+  return sortedByRoomArray;
 }
 function renderRoomConflicts(data, conflictArray) {
   // console.log("data",data);
+
+
 
   var output = '';
   output += '<div id="conflicts-room">';
@@ -592,7 +605,9 @@ function renderTable(data) {
   $('#schedule').append(output);
 }
 function Schedule(data, event){
-
+  $('#conflicts-room').remove();
+  $('#conflict-trigger').remove();
+  $('#refresh').remove();
   renderHeader(data, event);
   renderGrid(scheduleConfig.timeframe);
   renderTable(data[0]);
