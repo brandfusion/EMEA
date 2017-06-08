@@ -351,7 +351,7 @@ function renderRooms(data){
                 return result;
               },[])
               .uniqBy("id")
-              .sortBy("capacity")
+              .orderBy("capactiy", "desc")
               .value();
 
   // console.log("rooms",rooms)
@@ -396,7 +396,7 @@ function renderCard(o, topics){
                 return result;
               },[])
               .uniqBy("id")            
-              .sortBy("capacity")
+              .orderBy("capactiy", "desc")
               .value();
 
 // console.log(rooms);
