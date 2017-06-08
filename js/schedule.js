@@ -562,7 +562,8 @@ function renderRoomConflicts(data, conflictArray) {
   });
   output += '</div>';
 
-  $('#schedule-header').append('<div id="conflict-trigger"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ('+_.size(conflictArray)+') conflicts </div>')
+  $('#schedule-header').append('<div id="conflict-trigger"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ('+_.size(conflictArray)+') conflicts </div>');
+  $('#schedule-header').append('<div id="refresh"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh application</div>')
 
   $('#schedule').before(output);
 }
@@ -570,6 +571,7 @@ function renderTable(data) {
   // console.log(data.topics);
  $('#conflicts-room').remove();
   $('#conflict-trigger').remove();
+  $('#refresh').remove();
   console.log("THis is data", data);
   var conflictRoomArray = getRoomConflictArray(data.topics);
   console.log("conflict array", conflictRoomArray, );
@@ -599,9 +601,9 @@ function Schedule(data, event){
    var dataFilteredByDate = _.filter(data, function(o){
      return o.date == value;
    });
-   console.log("data", data);
-   console.log("value", value);
-   console.log("filtered by date", dataFilteredByDate[0]);
+   // console.log("data", data);
+   // console.log("value", value);
+   // console.log("filtered by date", dataFilteredByDate[0]);
    renderTable(dataFilteredByDate[0]);
    $('#grid').css("width", $('#header-rooms').width() + 100);
   });
@@ -609,6 +611,14 @@ function Schedule(data, event){
     //events 
     $('#conflict-trigger').on("click", function(){
       $('#conflicts-room').fadeToggle(300);
+    });
+    $('body').on("click", "#refresh", function(){
+      var dataFilteredByDate = _.filter(data, function(o){
+         return o.date == $("#header-day-select").val();
+      });
+      console.log("newData",dataFilteredByDate[0] )
+      renderTable(dataFilteredByDate[0]);
+      $('#grid').css("width", $('#header-rooms').width() + 100);
     });
     //Run
     // console.log("schedule",data);
