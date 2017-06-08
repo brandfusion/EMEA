@@ -351,8 +351,9 @@ function renderRooms(data){
                 return result;
               },[])
               .uniqBy("id")
-              .orderBy("capactiy", "desc")
+              .sortBy("capacity")
               .value();
+  rooms = rooms.reverse();            
 
   // console.log("rooms",rooms)
   var width = _.size(rooms)*scheduleConfig.gridWidthCell + 100;
@@ -396,9 +397,10 @@ function renderCard(o, topics){
                 return result;
               },[])
               .uniqBy("id")            
-              .orderBy("capactiy", "desc")
+              .sortBy("capacity")
               .value();
-
+  rooms = rooms.reverse();            
+  console.log("rooms",rooms);            
 // console.log(rooms);
 // console.log(_.findIndex(rooms, {"title": o.room.title}));
   // console.log(offsetLeft, rooms, o.room );           
@@ -548,7 +550,7 @@ function getRoomConflictArray(data) {
     return result;
   },[]);
 
-  
+  // var sortedByRoomArray = _.orderBy(array,'[room]')
   return array;
 }
 function renderRoomConflicts(data, conflictArray) {
