@@ -141,7 +141,7 @@ function getData(event){
   $.when(GetAPIData(daysUrl),GetAPIData(topicsUrl),GetAPIData(categoriesUrl),GetAPIData(roomsUrl),GetAPIData(speakersUrl)).then(function(v1,v2,v3,v4,v5){
     var conferencePathArray = conferenceArray(v3, event);    
     // console.log("days",v1);
-    // console.log("topics",v2);
+    console.log("topics",v2);
     // console.log("categories",v3);
     // console.log("rooms",v4);
     // console.log("speakers",v5);    
@@ -616,12 +616,13 @@ function Schedule(data, event) {
  
   $('body').on("click", "#conflict-trigger", function(){
     $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeToggle(300);
-    $('.conflict-item').hide();
+    $('.conflict-item').hide();    
   });
 
   $('body').on("click", "#conflicts-close", function(){
     $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeOut(300);
     $('.conflict-item').hide();
+
   });
 
   $('body').on("click", "#refresh", function(){
@@ -630,6 +631,7 @@ function Schedule(data, event) {
     });      
     renderTable(dataFilteredByDate[0]);
     $('#grid').css("width", $('#header-rooms').width() + 100);
+    $('#header-conference-select').val("");
   });
 
 
