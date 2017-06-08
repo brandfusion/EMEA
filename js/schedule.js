@@ -491,8 +491,10 @@ function getRoomConflictArray(data) {
     // console.log("currentObject", currentObj);
     // console.log("conflictArray", conflictArray); 
     if (_.size(conflictArray) > 0) { 
+      console.log(value);
       var obj = {};
       obj.id = value.id;
+      obj.sessionCode = value.sessionCode;
       obj.title = value.title;
       obj.roomName = value.room.title;
       obj.roomId = value.room.id;
@@ -502,6 +504,7 @@ function getRoomConflictArray(data) {
         var conflictObject = _.filter(data, function(o){return o.id == value.id})[0];
         var obj = {};
         obj.id = conflictObject.id;
+        obj.sessionCode = conflictObject.sessionCode;
         obj.title = conflictObject.title;
         obj.roomName = conflictObject.room.title;
         obj.roomId = conflictObject.room.id;
@@ -537,14 +540,14 @@ function renderRoomConflicts(conflictArray) {
   _.map(conflictArray, function(o){   
     output += '<div class="item">';
     output += '<p class="name"><strong>Name:</strong> '+o.title+'</p>';
-    output += '<p class="id"><strong>ID:</strong> '+o.id+'</p>';
+    output += '<p class="id"><strong>ID:</strong> '+o.sessionCode+'</p>';
     output += '<p class="hours"><strong>Timeframe:</strong> '+o.start+'-'+o.finish+'</p>';
     output += '<p class="room"><strong>Room:</strong> '+o.roomName+'</p>';
     output += '<button class="detail"><i class="fa fa-eye" aria-hidden="true"></i> conflict</button>'
     _.map(o.roomConflict, function(obj){
       output += '<div class="conflict-item">';
       output += '<p class="name"><strong>Name:</strong> '+obj.title+'</p>';
-      output += '<p class="id"><strong>ID:</strong> '+obj.id+'</p>';
+      output += '<p class="id"><strong>ID:</strong> '+obj.sessionCode+'</p>';
       output += '<p class="hours"><strong>Timeframe:</strong> '+obj.start+'-'+obj.finish+'</p>';
       output += '<p class="room"><strong>Room:</strong> '+obj.roomName+'</p>';
       if (obj.errorType == "time") {
@@ -611,10 +614,12 @@ function Schedule(data, event) {
  
   $('body').on("click", "#conflict-trigger", function(){
     $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeToggle(300);
+    $('#conflict-item').hide();
   });
 
   $('body').on("click", "#conflicts-close", function(){
     $('#conflicts-wrapper').removeClass("fadeIn").css("opacity", "1").fadeOut(300);
+    $('#conflict-item').hide();
   });
 
   $('body').on("click", "#refresh", function(){
