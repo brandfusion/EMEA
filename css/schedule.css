@@ -301,3 +301,6 @@ body {
 #conflict-trigger, #refresh {
   cursor: pointer;
 }
+#grid .hours .intervals:nth-child(12n+2),#grid .hours .intervals:nth-child(12n+3), #grid .hours .intervals:nth-child(12n+5), #grid .hours .intervals:nth-child(12n+6), #grid .hours .intervals:nth-child(12n+8), #grid .hours .intervals:nth-child(12n+9), #grid .hours .intervals:nth-child(12n+11), #grid .hours .intervals:nth-child(12n+12) {
+  opacity: 0;
+}

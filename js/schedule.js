@@ -1,6 +1,6 @@
 var scheduleConfig = {
   timeframe: [6,23],
-  gridHeightCell: 60,
+  gridHeightCell: 20,
   gridWidthCell: 300,
 }
 
@@ -10,7 +10,7 @@ function createTimeGridArray(){
     timeframeArray.push(i);
   }
   var timeTable = _.reduce(timeframeArray, function(result, val, key){
-    var intervals = ["00","15","30","45"];
+    var intervals = ["00","05","10","15","20","25","30","35","40","45","50","55"];
     var hour = val < 10 ? "0"+ val : val;
     var obj = {};
     obj.hour = hour;
@@ -32,7 +32,7 @@ function createFlatTimeGridArray(){
     timeframeArray.push(i);
   }
   var timeTable = _.reduce(timeframeArray, function(result, val, key){
-    var intervals = ["00","15","30","45"];
+    var intervals = ["00","05","10","15","20","25","30","35","40","45","50","55"];
     var hour = val < 10 ? "0"+ val : val;
     var array = [];
     _.map(intervals, function(inter){
@@ -609,7 +609,7 @@ function Schedule(data, event){
   });
 
     //events 
-    $('#conflict-trigger').on("click", function(){
+    $('body').on("click", "#conflict-trigger", function(){
       $('#conflicts-room').fadeToggle(300);
     });
     $('body').on("click", "#refresh", function(){
