@@ -565,8 +565,7 @@ function renderRoomConflicts(conflictArray) {
   output += '</div>';
   output += '</div>';
 
-  $('#schedule-header').append('<div id="conflict-trigger"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ('+_.size(conflictArray)+') conflicts </div>');
-  $('#schedule-header').append('<div id="refresh"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh application</div>')
+  
 
   $('#schedule').before(output);
 
@@ -582,10 +581,17 @@ function renderTable(data) {
   $('#conflict-trigger').remove();
   $('#refresh').remove();
   // console.log("THis is data", data);
-  var conflictRoomArray = getRoomConflictArray(data.topics);  
+  var conflictRoomArray = getRoomConflictArray(data.topics); 
+  
+  $('#schedule-header').append('<div id="refresh"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh application</div>')
+
   if (_.size(conflictRoomArray) > 0) {
+    $('#schedule-header').append('<div id="conflict-trigger"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ('+_.size(conflictRoomArray)+') conflicts </div>');
     renderRoomConflicts(conflictRoomArray);
-  } 
+  } else {
+    $('#schedule-header').append('<div id="conflict-trigger" class="noConflict">('+_.size(conflictRoomArray)+') conflicts </div>');
+  }
+  
   $("#event").remove();
   renderRooms(data);
   output = "";

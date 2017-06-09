@@ -378,6 +378,9 @@ body {
   font-size: 0.875rem;
   margin-left: 2rem;
 }
+#schedule-header #conflict-trigger.noConflict {
+  color: #fff;
+}
 #schedule-header #refresh {
   color: lime;
   font-size: 0.875rem;
