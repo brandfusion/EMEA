@@ -19,7 +19,7 @@ var eventData = [
 	"value": "nav2017us", 
 	"id":"DNA2017",
 	"apiKey": "94d7278053a749fdbb3bcd14a93e9cef",
-	"timeAdjust": "-7",
+	"timeAdjust": "-4",
 	"conferencePath": "1022d7fe-9c37-4497-8e88-c88eaceb5cdc",
 	"presentingPartner": "5b39c5c6-657f-4f94-b5b1-9198a33684bc"
 	},

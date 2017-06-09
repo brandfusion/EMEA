@@ -140,7 +140,7 @@ body {
 
 }
 #event .item h2 {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 400;
   line-height: 1.4;
   margin: 0;
@@ -227,13 +227,14 @@ body {
   z-index: 3;
   border-bottom: 2px solid #2a2a2a;
   display: block;
+  min-width: 100%;
 }
 #header-rooms .item {
   float: left;
 }
 #header-rooms .item {
   line-height: 3rem;
-  width: 300px;
+  width: 200px;
   text-align: center;
   font-size: 0.8rem;
   font-weight: 700;

@@ -1,7 +1,7 @@
 var scheduleConfig = {
   timeframe: [6,23],
-  gridHeightCell: 20,
-  gridWidthCell: 300,
+  gridHeightCell: 10,
+  gridWidthCell: 200,
 }
 
 function createTimeGridArray(){
