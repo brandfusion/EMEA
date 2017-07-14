@@ -1,0 +1,80 @@
+	body {
+		font-family: 'Oswald', sans-serif;
+	}
+
+
+	#filterSessionsContainer {
+		list-style-type: none;
+		padding: 0;
+	}	
+
+	#filterSessionsContainer li {
+		padding: 1em;
+		position: relative;
+		border-bottom: 1px solid black;
+	}
+
+	#filterSessionsContainer li a {
+		text-decoration: none;
+		cursor: pointer;
+		color: black;
+	}
+
+	#filterSessionsContainer li ul {
+		list-style-type: none;
+		color: #696464;
+		display: none;
+	}
+
+	#filterSessionsContainer li ul li {
+		cursor: default;
+		border: none;
+	}
+
+
+	#selectedSessions {
+		/*position: fixed;
+		bottom: 0px; */
+		padding: 1em;
+		display: inline-block;
+	}
+
+	#selectedSessions ul li {
+		float: left;
+		width: 150px;
+		padding: 0.5em;
+		list-style-type: none;
+		border: 1px solid black;
+		text-align: center;
+	}
+
+	#selectedSessions ul li:hover {
+		background-color: #f2f2f2;
+	}
+
+	.sessionWrapper {
+		transition: .2s all linear;
+	}
+
+	.sessionWrapper:hover {
+		transition: .2s all linear;
+		color: #ffffff;
+		background-color: #312c2c;
+	}
+
+	.red-border {
+		border: 2px solid red !important;
+	}
+
+
+	#filterSessions {
+		height: 100vh;
+	}
+
+
+
+	@media screen and (max-width: 500px)  {
+	    #filterSessions {
+	    	height: initial;
+	    }
+	}
