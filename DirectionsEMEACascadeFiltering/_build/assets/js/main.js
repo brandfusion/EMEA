@@ -407,7 +407,7 @@
 				  		buildSchedule(dataSet);
 
 
-				  		Cookies.set("filtered" , "[]");
+				  		// Cookies.set("filtered" , "[]");
 
 
 				  });
@@ -453,7 +453,9 @@
 
 	    			  				return result;
 	    			  		} , []);
+							
 
+							console.log(filtered_days)
 
 	    			  		return filtered_days;
 
@@ -584,28 +586,34 @@
 				  function addToSelectedFilters(id , text) {
 				  	var target = $("#selectedSessions").find("ul");
 
-
-
+				  	// only one filter at a time
+				  	arrayOfFilters = [];
 
 				  	var object = {};
 				  	object.id = id;
 				  	object.name = text;
 
+				  	arrayOfFilters.push(object);
+
+				  	addFilterToCookie(arrayOfFilters);
+
+				  	// end only one filter at a time
+
 						
-				  	var isThere = _.filter(arrayOfFilters , function(o){
-				  		return o.id == object.id;
-				  	});
+				  	// var isThere = _.filter(arrayOfFilters , function(o){
+				  	// 	return o.id == object.id;
+				  	// });
 
-				  	var isInArray = _.size(isThere) ? true : false;
+				  	// var isInArray = _.size(isThere) ? true : false;
 
-				  	if(!isInArray) {
-				  		arrayOfFilters.push(object);
-				  		addFilterToCookie(arrayOfFilters);
+				  	// if(!isInArray) {
+				  	// 	arrayOfFilters.push(object);
+				  	// 	addFilterToCookie(arrayOfFilters);
 				  		
-				  	} else {
-				  		alert("The filter is already applied!");
-				  		return;
-				  	}
+				  	// } else {
+				  	// 	alert("The filter is already applied!");
+				  	// 	return;
+				  	// }
 
 
 				  	// console.log(arrayOfFilters);
