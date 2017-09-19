@@ -148,8 +148,14 @@
 				  $.when(GetAPIData(daysUrl),GetAPIData(topicsUrl),GetAPIData(categoriesUrl),GetAPIData(roomsUrl),GetAPIData(speakersUrl)).then(function(v1,v2,v3,v4,v5){
 				    // var conferencePathArray = conferenceArray(v3, event);    
 				    // console.log("days",v1);
-				    console.log("topics",v2);
+				    // console.log("topics",v2);
+
+				    $("#loading-content").css("display" , "none");
+				    $("#loading-content-two").css("display" , "none");
 				    handleFilterCategories(v3);
+
+
+
 				    // console.log("categories",v3);
 				    // console.log("rooms",v4);
 				    // console.log("speakers",v5);    
@@ -305,7 +311,7 @@
 
 				$.when(getData(config)).then(function(data){
 
-				 
+
 
 				  var dataSet = data;
 				  console.log("dataset",dataSet);
